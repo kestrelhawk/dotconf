@@ -43,12 +43,14 @@ for configFile in configFiles:
     if not os.path.isdir( CONFIGS_DIR ):
         os.makedirs( CONFIGS_DIR )
 
-    if os.path.isfile( configFile ) and not os.path.islink( configFile ):
+    if os.path.exists( configFile ) and not os.path.islink( configFile ):
         moveDir = shutil.move( configFile, CONFIGS_DIR )
         os.symlink( moveDir, configFile )
         print( configFile + ' has been stored in ' + moveDir )
         output[ os.path.abspath( configFile ) ] = { 'new_path': os.path.abspath( moveDir ) }
 
+    elif os.path.islink( configFile ):
+        print( 'File "' + configFile + '" is a symbolic link. Has it already been added to dotfiles?' )
     else:
         print( 'File "' + configFile + '" does not exist.' )
 
